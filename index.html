@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="circle" width="150" height="150"></canvas>
+    <script src="react\react.js"></script>
+    <script src="react\react-dom.js"></script>
+    <script src="react\babel.js"></script>
+    
+    <div id="app"></div>
+
+    <script type="text/babel">
+
+        function getlength(number) {
+            return number.toString().length;
+        }
+
+        class Clock extends React.Component {
+            constructor() {
+                const hours=null
+                const minutes=null
+                const time=null
+                const correct = ''
+                super()
+                this.state = {hours: 4, minutes: 20, difficulty: 5, hValue: '', mValue: '', response: null, streak: 0}
+            }
+
+            checkAnswer = (e) => {
+                e.preventDefault()
+                var checkH = this.state.hValue
+                var checkM = this.state.mValue
+                if(checkM == "00"){ 
+                    checkM =0 
+                }else if (checkM.charAt(0) == '0'){    // converting 00 to 0 and 03 to 3
+                    checkM = checkM.charAt(1)
+                } 
+
+                if((checkH == this.hours) && (checkM == this.minutes)) {
+                    this.setState({streak: this.state.streak + 1})
+                    this.correct = 'Correct! '
+                }else{ 
+                    this.setState({streak: 0})
+                    this.correct = 'Incorrect! Try again! ' 
+                }
+                this.randomTime(e)
+            }
+            
+            randomTime = (e) => {
+                this.hours = Math.floor(Math.random() * 11) + 1
+                this.minutes = (Math.round((Math.floor(Math.random()*59) / this.state.difficulty)) * this.state.difficulty) 
+                this.time = this.hours + ':' + this.minutes
+                this.setState({hours: this.hours, minutes: this.minutes})
+
+            }
+
+            handleChange = (e) => {
+                e.target.id == 'hours' ? this.setState({hValue: e.target.value}) : this.setState({mValue: e.target.value})
+            }
+
+            setDifficulty = () => {
+                const difficulty = event.target.id == 'easy' ? 10 : event.target.id =='medium' ? 5 : 1
+                this.setState({difficulty: difficulty})
+            }
+
+            render(){
+                const difficultyText = this.state.difficulty == 10 ? <h3>Difficulty: Easy (minutes are multiples of ten)</h3> : this.state.difficulty == 5 ? <h3>Difficulty: Medium (minutes are multiples of five)</h3> : <h3>Difficulty: Hard (minutes can be any number)</h3>
+                const resultText = <h2>{this.correct} Your streak is: {this.state.streak} </h2>
+                return(
+                    <div className = 'one'>
+                        <span>{resultText}</span>
+                        <div className = 'two'>
+                            <img className="clockHand" style = {{transform: `rotate(${this.state.minutes * 6}deg)`}} src="pictures\minute hand.png"></img>
+                            <img className="clockHand" style = {{transform: `rotate(${((((this.state.hours) * 60) + this.state.minutes) / 60) * 30 }deg)`}} src="pictures\hourHand.png"></img>
+                            <img style = {{zIndex: '5'}} width="200px" height="auto" src="pictures\clock face.png"></img>
+                            <div style ={{display:'flex', flexDirection: 'column', padding: '20px'}}>
+                                <button className = 'difficultyButton' id= 'easy'onClick={this.setDifficulty}>EASY</button>
+                                <button className = 'difficultyButton' id= 'medium'onClick={this.setDifficulty}>MEDIUM</button>
+                                <button className = 'difficultyButton' id= 'hard'onClick={this.setDifficulty}>HARD</button>
+                            </div>
+                            {difficultyText}
+                        </div>
+                        <div className = 'three'>
+                                    <form onSubmit = {this.checkAnswer}>
+                                        <label>
+                                        <h3>Answer:</h3>
+                                        <input className = "input" id='hours' onChange={this.handleChange} min = '1' max = '12'type = "number"></input>
+                                        :
+                                        <input className = "input" id='minutes'min = '0' onChange={this.handleChange}max = '59'type = "number"></input>
+                                        </label>
+                                        <input type = "submit"style = {{width: "75px"}} defaultValue = 'Submit'></input>
+                                    </form>
+                        </div>
+                    </div>
+                )   
+            }
+        }
+
+        ReactDOM.render(<Clock/>, document.getElementById('app'))
+    </script>
+</body>
+</html>
