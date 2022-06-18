@@ -76,7 +76,7 @@
                         <span>{resultText}</span>
                         <div className = 'two'>
                             <img className="clockHand" style = {{transform: `rotate(${this.state.minutes * 6}deg)`}} src="pictures\minute hand.png"></img>
-                            <img className="clockHand" style = {{transform: `rotate(${((((this.state.hours) * 60) + this.state.minutes) / 60) * 30 }deg)`}} src="pictures\hourHand.png"></img>
+                            <img className="clockHand" style = {{transform: `rotate(${(((((this.state.hours) * 60) + this.state.minutes) / 60) * 30) - 5 }deg)`}} src="pictures\hourHand.png"></img>
                             <img style = {{zIndex: '5'}} width="200px" height="auto" src="pictures\clock face.png"></img>
                             <div style ={{display:'flex', flexDirection: 'column', padding: '20px'}}>
                                 <button className = 'difficultyButton' id= 'easy'onClick={this.setDifficulty}>EASY</button>
